@@ -49,13 +49,13 @@
 
     <div id="overlay">
         <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-white mb-4"></div>
-        <p>তথ্য জমা হচ্ছে, দয়া করে অপেক্ষা করুন...</p>
+        <p>তথ্য ডাটাবেজে জমা হচ্ছে...</p>
     </div>
 
     <div class="header-main">
         <button onclick="window.history.back()" class="absolute left-6 top-8 text-white"><i class="fas fa-arrow-left"></i></button>
         <h2 class="text-2xl font-bold">রক্তদাতা রেজিস্ট্রেশন</h2>
-        <p class="text-xs opacity-80 mt-1">আপনার তথ্য গোপন ও নিরাপদ থাকবে</p>
+        <p class="text-xs opacity-80 mt-1">আপনার একটি দান, বাঁচাবে একটি প্রাণ</p>
     </div>
 
     <div class="form-container">
@@ -117,17 +117,18 @@
             <div class="input-group">
                 <label><i class="fas fa-calendar-alt mr-2 text-red-700"></i>শেষ রক্তদানের তারিখ</label>
                 <input type="date" name="LastDonate">
-                <p class="text-[10px] text-gray-400 mt-1">যদি আগে রক্ত না দিয়ে থাকেন তবে খালি রাখুন</p>
+                <p class="text-[10px] text-gray-400 mt-1">কখনো না দিলে খালি রাখুন</p>
             </div>
 
             <button type="submit" class="submit-btn">
-                তথ্য জমা দিন <i class="fas fa-paper-plane"></i>
+                নিবন্ধন সম্পন্ন করুন <i class="fas fa-paper-plane"></i>
             </button>
         </form>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyrLKtlPIYoa-Qwn1oc8TZ1pNULQeRJpK1r9ac6bJeLWpuRKAlu5_JVqaFUr47TSZ7XyA/exec"; // আপনার Web App URL টি এখানে বসান
+        // আপনার Web App URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxmh2uW4px02CXkhMAzq1WtWWO3wdF3-GNKyfKWvANah2-rLBOOMlDeF4rwc-Gsm4gPGw/exec"; 
         const form = document.getElementById('registrationForm');
         const overlay = document.getElementById('overlay');
 
@@ -136,21 +137,27 @@
             overlay.style.display = 'flex';
 
             const formData = new FormData(form);
-            formData.append('action', 'register'); // স্ক্রিপ্টকে অ্যাকশন জানানো
+            formData.append('action', 'register');
 
-            fetch(scriptURL, { method: 'POST', body: formData})
-                .then(response => {
-                    overlay.style.display = 'none';
-                    alert("অভিনন্দন! আপনার রেজিস্ট্রেশন সফল হয়েছে।");
-                    form.reset();
-                    window.location.href = "index.html"; // হোম পেজে নিয়ে যাবে
-                })
-                .catch(error => {
-                    overlay.style.display = 'none';
-                    alert("দুঃখিত! তথ্য জমা দিতে সমস্যা হয়েছে।");
-                    console.error('Error!', error.message);
-                });
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: formData,
+                mode: 'no-cors' // CORS ইস্যু সমাধান করার জন্য
+            })
+            .then(() => {
+                // 'no-cors' মোডে থাকাকালীন সার্ভার রেসপন্স রিড করা যায় না, 
+                // তাই আমরা সরাসরি সাকসেস মেসেজ দেখাব।
+                overlay.style.display = 'none';
+                alert("ধন্যবাদ! আপনার রেজিস্ট্রেশন সফলভাবে সম্পন্ন হয়েছে।");
+                form.reset();
+                window.location.href = "index.html"; 
+            })
+            .catch(error => {
+                overlay.style.display = 'none';
+                alert("দুঃখিত! কানেকশন জনিত সমস্যা হয়েছে। পুনরায় চেষ্টা করুন।");
+                console.error('Error!', error.message);
+            });
         });
     </script>
 </body>
-</html>
+</html>ody
