@@ -6,6 +6,8 @@
     <title>রক্তদাতা রেজিস্ট্রেশন</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         :root { --khoiri: #800000; --bg-gray: #E5E1E1; }
         body { background-color: var(--bg-gray); font-family: 'SolaimanLipi', sans-serif; margin: 0; }
@@ -127,8 +129,9 @@
     </div>
 
     <script>
-        // আপনার Web App URL
+        // এখানে আপনার Web App URL বসান
         const scriptURL = "https://script.google.com/macros/s/AKfycbyLlqzUjLCDxfla0wLTkLX1f13lwRHY36n5ABYjhq2RAuV9yIabnTU82ScLUHN6WETWmw/exec"; 
+        
         const form = document.getElementById('registrationForm');
         const overlay = document.getElementById('overlay');
 
@@ -142,22 +145,39 @@
             fetch(scriptURL, { 
                 method: 'POST', 
                 body: formData,
-                mode: 'no-cors' // CORS ইস্যু সমাধান করার জন্য
+                mode: 'no-cors' 
             })
             .then(() => {
-                // 'no-cors' মোডে থাকাকালীন সার্ভার রেসপন্স রিড করা যায় না, 
-                // তাই আমরা সরাসরি সাকসেস মেসেজ দেখাব।
                 overlay.style.display = 'none';
-                alert("ধন্যবাদ! আপনার রেজিস্ট্রেশন সফলভাবে সম্পন্ন হয়েছে।");
-                form.reset();
-                window.location.href = "index.html"; 
+                
+                // সুন্দর কার্ড নোটিফিকেশন
+                Swal.fire({
+                    title: 'অভিনন্দন!',
+                    text: 'আপনার রেজিস্ট্রেশন সফলভাবে সম্পন্ন হয়েছে।',
+                    icon: 'success',
+                    confirmButtonColor: '#800000',
+                    confirmButtonText: 'ঠিক আছে',
+                    background: '#fff',
+                    customClass: {
+                        popup: 'rounded-[30px]',
+                        confirmButton: 'rounded-[15px] px-8 py-2'
+                    }
+                }).then(() => {
+                    form.reset();
+                    window.location.href = "index.html"; 
+                });
             })
             .catch(error => {
                 overlay.style.display = 'none';
-                alert("দুঃখিত! কানেকশন জনিত সমস্যা হয়েছে। পুনরায় চেষ্টা করুন।");
+                Swal.fire({
+                    title: 'দুঃখিত!',
+                    text: 'কানেকশন জনিত সমস্যা হয়েছে। পুনরায় চেষ্টা করুন।',
+                    icon: 'error',
+                    confirmButtonColor: '#800000'
+                });
                 console.error('Error!', error.message);
             });
         });
     </script>
 </body>
-</html>ody
+</html>
