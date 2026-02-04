@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমাদের গ্রুপ - ব্লাড সার্ভিস</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --khoiri: #800000; 
+            --deep-bg: #E5E1E1; 
+        }
+        body { background-color: var(--deep-bg); font-family: 'SolaimanLipi', sans-serif; margin: 0; padding: 0; }
+
+        .header-gradient {
+            background: linear-gradient(135deg, var(--khoiri) 0%, #b30000 100%);
+            border-radius: 0 0 40px 40px;
+            padding: 50px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .group-card {
+            background: white;
+            border-radius: 30px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+            border: 1px solid #fff;
+        }
+        .group-card:active { transform: scale(0.95); }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 30px;
+        }
+
+        .join-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body class="pb-10">
+
+    <div class="header-gradient">
+        <button onclick="window.location.href='index.html'" class="absolute left-6 top-10 text-white">
+            <i class="fas fa-chevron-left text-xl"></i>
+        </button>
+        <h2 class="text-2xl font-bold mt-2">আমাদের কমিউনিটি</h2>
+        <p class="text-xs opacity-80 mt-1">একসাথে লড়ি, জীবন বাঁচাই</p>
+    </div>
+
+    <div class="px-6 mt-8">
+        
+        <div class="group-card">
+            <div class="icon-circle bg-blue-100 text-[#1877F2]">
+                <i class="fab fa-facebook-f"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800">ফেসবুক গ্রুপ</h3>
+            <p class="text-sm text-gray-500 mt-1">আমাদের অফিসিয়াল ফেসবুক গ্রুপে যুক্ত হয়ে নিয়মিত আপডেট পান।</p>
+            <a href="YOUR_FB_GROUP_LINK" class="join-btn bg-[#1877F2] shadow-lg shadow-blue-200">
+                যুক্ত হন
+            </a>
+        </div>
+
+        <div class="group-card">
+            <div class="icon-circle bg-blue-50 text-[#0084FF]">
+                <i class="fab fa-facebook-messenger"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800">মেসেঞ্জার গ্রুপ</h3>
+            <p class="text-sm text-gray-500 mt-1">জরুরি রক্তের প্রয়োজনে সরাসরি চ্যাট গ্রুপে যুক্ত থাকুন।</p>
+            <a href="YOUR_MESSENGER_LINK" class="join-btn bg-[#0084FF] shadow-lg shadow-blue-100">
+                যুক্ত হন
+            </a>
+        </div>
+
+        <div class="group-card">
+            <div class="icon-circle bg-emerald-100 text-[#25D366]">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-800">হোয়াটসঅ্যাপ গ্রুপ</h3>
+            <p class="text-sm text-gray-500 mt-1">সবচেয়ে দ্রুত রেসপন্স পেতে আমাদের হোয়াটসঅ্যাপে যোগ দিন।</p>
+            <a href="YOUR_WHATSAPP_LINK" class="join-btn bg-[#25D366] shadow-lg shadow-emerald-100">
+                যুক্ত হন
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
