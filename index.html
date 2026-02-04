@@ -22,7 +22,7 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        /* কাউন্টার কার্ড - জিরো সেট করা */
+        /* কাউন্টার কার্ড */
         .stat-card {
             background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(10px);
@@ -136,15 +136,15 @@
         <div class="flex gap-3 justify-between mb-8">
             <div class="stat-card">
                 <p class="text-[10px] font-bold uppercase opacity-80 mb-1">মোট ইউজার</p>
-                <h2 class="text-2xl font-black">০</h2>
+                <h2 id="total-users" class="text-2xl font-black">০</h2>
             </div>
             <div class="stat-card">
                 <p class="text-[10px] font-bold uppercase opacity-80 mb-1">রক্তদান</p>
-                <h2 class="text-2xl font-black">০</h2>
+                <h2 id="total-done" class="text-2xl font-black">০</h2>
             </div>
             <div class="stat-card">
-                <p class="text-[10px] font-bold uppercase opacity-80 mb-1">সন্তুষ্ট ইউজার</p>
-                <h2 class="text-2xl font-black">০</h2>
+                <p class="text-[10px] font-bold uppercase opacity-80 mb-1">মোট রক্তদাতা</p>
+                <h2 id="total-donors" class="text-2xl font-black">০</h2>
             </div>
         </div>
 
@@ -172,7 +172,6 @@
 
     <div class="bottom-nav-container">
         <div class="flex justify-between items-center max-w-md mx-auto relative">
-            
             <div class="flex flex-col items-center">
                 <button onclick="window.location.href='index.html'" class="nav-btn-small">
                     <i class="fas fa-home text-lg"></i>
@@ -222,26 +221,57 @@
     </div>
 
     <script>
+        // আপনার Web App URL এখানে বসান
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyrLKtlPIYoa-Qwn1oc8TZ1pNULQeRJpK1r9ac6bJeLWpuRKAlu5_JVqaFUr47TSZ7XyA/exec";
+
+        // মেনু এবং স্লাইডার লজিক (ঠিক রাখা হয়েছে)
         function toggleMenu() {
             const menu = document.getElementById('menuMain');
             const icon = document.getElementById('menuIcon');
             menu.classList.toggle('active-menu');
-            
-            if(menu.classList.contains('active-menu')) {
-                icon.classList.replace('fa-bars', 'fa-times');
-            } else {
-                icon.classList.replace('fa-times', 'fa-bars');
-            }
+            if(menu.classList.contains('active-menu')) { icon.classList.replace('fa-bars', 'fa-times'); } 
+            else { icon.classList.replace('fa-times', 'fa-bars'); }
         }
 
         let currentSlide = 0;
         setInterval(() => {
             currentSlide = (currentSlide + 1) % 2;
             const slider = document.getElementById('slider');
-            if(slider) {
-                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-            }
+            if(slider) { slider.style.transform = `translateX(-${currentSlide * 100}%)`; }
         }, 5000);
+
+        // --- রিয়েল-টাইম কাউন্টার ও ভিজিটর লজিক ---
+        
+        async function trackVisitorAndLoadStats() {
+            try {
+                // ১. ইউজারের আইপি ডিটেক্ট করা
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                
+                // ২. আইপি শিটে পাঠানো (Visitors Sheet)
+                const formData = new FormData();
+                formData.append('action', 'trackVisitor');
+                formData.append('IP', ipData.ip);
+                formData.append('Device', navigator.platform);
+
+                await fetch(scriptURL, { method: 'POST', body: formData });
+
+                // ৩. গুগল শিট থেকে সকল কাউন্টিং ডেটা আনা
+                const response = await fetch(scriptURL);
+                const data = await response.json();
+
+                // ৪. হোম পেজের কাউন্টারে সংখ্যা বসানো
+                document.getElementById('total-users').innerText = data.totalUsers;
+                document.getElementById('total-done').innerText = data.totalDone;
+                document.getElementById('total-donors').innerText = data.totalDonors;
+
+            } catch (error) {
+                console.error("Error connecting to database:", error);
+            }
+        }
+
+        // পেজ লোড হলে ফাংশনটি রান হবে
+        window.onload = trackVisitorAndLoadStats;
     </script>
 </body>
 </html>
