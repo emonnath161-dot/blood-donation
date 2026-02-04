@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>যোগাযোগ - ব্লাড সার্ভিস</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --khoiri: #800000; 
+            --deep-bg: #E5E1E1; 
+        }
+        body { background-color: var(--deep-bg); font-family: 'SolaimanLipi', sans-serif; margin: 0; padding: 0; }
+
+        /* হেডার ডিজাইন */
+        .header-gradient {
+            background: linear-gradient(135deg, var(--khoiri) 0%, #b30000 100%);
+            border-radius: 0 0 40px 40px;
+            padding: 40px 20px 40px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        /* কন্টেন্ট কন্টেইনার - এলাইনমেন্ট ফিক্স */
+        .content-container {
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 25px;
+            padding: 18px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .info-area { display: flex; align-items: center; gap: 15px; }
+
+        .icon-box {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .action-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* ইনপুট ফিল্ড */
+        .input-field {
+            width: 100%;
+            padding: 14px 20px;
+            background: #fdfdfd;
+            border: 1px solid #E2E8F0;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .send-btn {
+            background: var(--khoiri);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            border-radius: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 15px rgba(128, 0, 0, 0.2);
+        }
+
+        /* সোশ্যাল বাটন এনিমেশন */
+        .social-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-8px) rotate(8deg);
+            color: white;
+        }
+        .fb:hover { background-color: #1877F2; }
+        .yt:hover { background-color: #FF0000; }
+        .tw:hover { background-color: #1DA1F2; }
+    </style>
+</head>
+<body class="pb-10">
+
+    <div class="header-gradient">
+        <button onclick="window.history.back()" class="absolute left-6 top-10 text-white">
+            <i class="fas fa-chevron-left text-xl"></i>
+        </button>
+        <h2 class="text-2xl font-bold mt-2">যোগাযোগ করুন</h2>
+        <p class="text-xs opacity-80 mt-1">আমরা সবসময় আপনার পাশে আছি</p>
+    </div>
+
+    <div class="content-container">
+        <div class="contact-card">
+            <div class="info-area">
+                <div class="icon-box bg-green-50 text-green-600"><i class="fas fa-phone-alt"></i></div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-sm">কল করুন</h3>
+                    <p class="text-[11px] text-gray-400">০১৭০০-০০০০০০</p>
+                </div>
+            </div>
+            <a href="tel:01700000000" class="action-btn bg-green-500"><i class="fas fa-phone-alt text-sm"></i></a>
+        </div>
+
+        <div class="contact-card">
+            <div class="info-area">
+                <div class="icon-box bg-emerald-50 text-emerald-600"><i class="fab fa-whatsapp text-2xl"></i></div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-sm">হোয়াটসঅ্যাপ</h3>
+                    <p class="text-[11px] text-gray-400">সরাসরি মেসেজ দিন</p>
+                </div>
+            </div>
+            <a href="https://wa.me/8801700000000" class="action-btn bg-emerald-500"><i class="fab fa-whatsapp text-lg"></i></a>
+        </div>
+
+        <div class="contact-card">
+            <div class="info-area">
+                <div class="icon-box bg-blue-50 text-blue-600"><i class="fas fa-envelope"></i></div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-sm">ইমেইল করুন</h3>
+                    <p class="text-[11px] text-gray-400">info@bloodservice.com</p>
+                </div>
+            </div>
+            <a href="mailto:info@bloodservice.com" class="action-btn bg-blue-500"><i class="fas fa-envelope text-sm"></i></a>
+        </div>
+
+        <div class="bg-white rounded-[30px] p-7 mt-6 shadow-sm">
+            <h3 class="font-bold text-gray-800 text-base mb-5 flex items-center gap-2">
+                <i class="fas fa-envelope-open-text text-[#800000]"></i> আমাদের মেসেজ পাঠান
+            </h3>
+            <div>
+                <input type="text" id="userName" placeholder="আপনার নাম" class="input-field">
+                <input type="number" id="userPhone" placeholder="আপনার মোবাইল নম্বর" class="input-field">
+                <textarea id="userMsg" placeholder="আপনার বার্তা লিখুন..." rows="3" class="input-field"></textarea>
+                <button onclick="sendSMS()" class="send-btn active:scale-95 transition-all">
+                    মেসেজ জমা দিন <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="social-container">
+            <a href="https://facebook.com/yourlink" class="social-btn fb text-[#1877F2]"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://youtube.com/yourlink" class="social-btn yt text-[#FF0000]"><i class="fab fa-youtube"></i></a>
+            <a href="https://twitter.com/yourlink" class="social-btn tw text-[#1DA1F2]"><i class="fab fa-twitter"></i></a>
+        </div>
+    </div>
+
+    <script>
+        function sendSMS() {
+            // আপনার ফোন নম্বর এখানে দিন (যেখানে মেসেজ যাবে)
+            const adminNumber = "01700000000"; 
+            
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            const message = document.getElementById('userMsg').value;
+
+            if (name === "" || phone === "" || message === "") {
+                alert("অনুগ্রহ করে সব তথ্য পূরণ করুন।");
+                return;
+            }
+
+            // মেসেজ ফরম্যাট
+            const fullMessage = `নাম: ${name}\nনম্বর: ${phone}\nবার্তা: ${message}`;
+            
+            // SMS লিঙ্ক তৈরি (মোবাইল ব্রাউজারের জন্য)
+            const smsLink = `sms:${adminNumber}?body=${encodeURIComponent(fullMessage)}`;
+            
+            window.location.href = smsLink;
+        }
+    </script>
+</body>
+</html>
