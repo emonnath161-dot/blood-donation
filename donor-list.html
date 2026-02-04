@@ -6,6 +6,8 @@
     <title>রক্তদাতার তালিকা - রিয়েল টাইম</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         :root { --khoiri: #800000; --bg-gray: #E5E1E1; }
         body { background-color: var(--bg-gray); font-family: 'SolaimanLipi', sans-serif; margin: 0; padding-bottom: 40px; }
@@ -37,7 +39,6 @@
         .btn-check { width: 55px; height: 54px; background: white; color: #10B981; border: 2px solid #10B981; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: 0.3s; }
         .btn-check.disabled { border-color: #D1D5DB; color: #9CA3AF; cursor: not-allowed; }
 
-        /* Loader */
         #loader { text-align: center; padding: 50px; display: block; }
     </style>
 </head>
@@ -50,14 +51,14 @@
     </div>
 
     <div id="loader">
-        <i class="fas fa-spinner fa-spin text-3xl text-[#800000]"></i>
-        <p class="mt-2 text-gray-500">ডোনার লিস্ট লোড হচ্ছে...</p>
+        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-[#800000] mx-auto mb-4"></div>
+        <p class="text-gray-500">ডোনার লিস্ট লোড হচ্ছে...</p>
     </div>
 
     <div id="donorContainer" class="mt-6"></div>
 
     <script>
-        // আপনার Web App URL এখানে বসান
+        // এখানে আপনার Web App URL বসান
         const scriptURL = "https://script.google.com/macros/s/AKfycbyLlqzUjLCDxfla0wLTkLX1f13lwRHY36n5ABYjhq2RAuV9yIabnTU82ScLUHN6WETWmw/exec";
 
         async function fetchDonors() {
@@ -68,7 +69,12 @@
                 document.getElementById('loader').style.display = 'none';
             } catch (error) {
                 console.error("Error:", error);
-                document.getElementById('loader').innerHTML = "ডেটা লোড করতে সমস্যা হয়েছে।";
+                Swal.fire({
+                    title: 'দুঃখিত!',
+                    text: 'ডেটা লোড করতে সমস্যা হয়েছে।',
+                    icon: 'error',
+                    confirmButtonColor: '#800000'
+                });
             }
         }
 
@@ -76,7 +82,8 @@
             if (!lastDate || lastDate === "") return { canDonate: true, daysLeft: 0 };
             const last = new Date(lastDate);
             const today = new Date();
-            const diffDays = Math.ceil((today - last) / (1000 * 60 * 60 * 24));
+            const diffTime = today - last;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             return { canDonate: diffDays >= 90, daysLeft: 90 - diffDays };
         }
 
@@ -118,16 +125,55 @@
         }
 
         async function updateDonationStatus(phone, canDonate) {
-            if (!canDonate) return;
-            if (confirm("আপনি কি নিশ্চিত যে এই ডোনার আজ রক্ত দিয়েছেন?")) {
-                const formData = new FormData();
-                formData.append('action', 'updateTick');
-                formData.append('Phone', phone);
-
-                alert("আপডেট হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
-                await fetch(scriptURL, { method: 'POST', body: formData });
-                location.reload(); 
+            if (!canDonate) {
+                Swal.fire({
+                    text: 'এই ডোনার বর্তমানে রক্ত দিতে পারবেন না।',
+                    icon: 'info',
+                    confirmButtonColor: '#800000'
+                });
+                return;
             }
+
+            // কনফার্মেশন কার্ড
+            Swal.fire({
+                title: 'আপনি কি নিশ্চিত?',
+                text: "এই ডোনার কি আজ রক্ত দিয়েছেন?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#10B981',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'হ্যাঁ, দিয়েছেন',
+                cancelButtonText: 'না',
+                customClass: { popup: 'rounded-[30px]' }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    // লোডিং কার্ড
+                    Swal.fire({
+                        title: 'আপডেট হচ্ছে...',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+
+                    const formData = new FormData();
+                    formData.append('action', 'updateTick');
+                    formData.append('Phone', phone);
+
+                    try {
+                        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+                        
+                        Swal.fire({
+                            title: 'সফল!',
+                            text: 'ডোনার স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে।',
+                            icon: 'success',
+                            confirmButtonColor: '#800000'
+                        }).then(() => {
+                            location.reload(); 
+                        });
+                    } catch (e) {
+                        Swal.fire('ত্রুটি!', 'আপডেট করতে সমস্যা হয়েছে।', 'error');
+                    }
+                }
+            });
         }
 
         window.onload = fetchDonors;
