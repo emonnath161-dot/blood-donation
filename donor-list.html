@@ -3,35 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>রক্তদাতার তালিকা - ব্লাড সার্ভিস</title>
+    <title>রক্তদাতার তালিকা - রিয়েল টাইম</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --khoiri: #800000; --bg-gray: #E5E1E1; }
         body { background-color: var(--bg-gray); font-family: 'SolaimanLipi', sans-serif; margin: 0; padding-bottom: 40px; }
         
-        /* হেডার */
         .header-main {
             background: linear-gradient(135deg, var(--khoiri) 0%, #b30000 100%);
             border-radius: 0 0 35px 35px;
             padding: 45px 20px 65px;
-            color: white;
-            text-align: center;
-            position: relative;
+            color: white; text-align: center; position: relative;
         }
 
-        /* প্রিমিয়াম ডোনার কার্ড */
         .donor-card {
-            background: white;
-            border-radius: 30px;
-            padding: 22px;
-            margin: 25px 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-            border: 1px solid #f0f0f0;
+            background: white; border-radius: 30px; padding: 22px;
+            margin: 25px 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            position: relative; border: 1px solid #f0f0f0;
         }
 
         .image-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .donor-image { width: 75px; height: 75px; border-radius: 22px; object-fit: cover; border: 3px solid #f9f9f9; }
+        .donor-image { width: 75px; height: 75px; border-radius: 22px; object-fit: cover; border: 3px solid #f9f9f9; background: #eee; }
         .blood-group-label { background: var(--khoiri); color: white; font-size: 14px; font-weight: 900; padding: 2px 14px; border-radius: 10px; }
 
         .status-badge { font-size: 11px; font-weight: bold; padding: 6px 14px; border-radius: 50px; display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; }
@@ -39,171 +32,105 @@
         .unavailable { background: #FFE4E6; color: #E11D48; }
 
         .action-area { display: flex; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px dashed #eee; }
-        .btn-call { flex: 1; background: var(--khoiri); color: white; padding: 14px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; box-shadow: 0 6px 15px rgba(128,0,0,0.2); }
+        .btn-call { flex: 1; background: var(--khoiri); color: white; padding: 14px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
         
-        .btn-check { width: 55px; height: 54px; background: white; color: #10B981; border: 2px solid #10B981; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .btn-check.disabled { border-color: #D1D5DB; color: #9CA3AF; }
+        .btn-check { width: 55px; height: 54px; background: white; color: #10B981; border: 2px solid #10B981; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: 0.3s; }
+        .btn-check.disabled { border-color: #D1D5DB; color: #9CA3AF; cursor: not-allowed; }
 
-        .search-container { margin: -30px 25px 0; background: white; border-radius: 20px; padding: 5px 18px; display: flex; align-items: center; box-shadow: 0 8px 20px rgba(0,0,0,0.1); z-index: 50; position: relative; }
-
-        /* --- আধুনিক নোটিফিকেশন বক্স স্টাইল --- */
-        #custom-alert-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .alert-box {
-            background: white;
-            width: 100%;
-            max-width: 320px;
-            border-radius: 35px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-            transform: scale(0.8);
-            opacity: 0;
-            transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .alert-box.show { transform: scale(1); opacity: 1; }
-
-        .alert-header {
-            background: linear-gradient(135deg, #910000, #5c0000);
-            padding: 30px 20px;
-            text-align: center;
-            color: white;
-        }
-
-        .alert-body { padding: 25px; text-align: center; }
-        .alert-body p { color: #444; font-size: 15px; line-height: 1.6; }
-
-        .alert-footer { padding: 0 20px 25px; display: flex; gap: 10px; }
-        .alert-btn {
-            flex: 1; padding: 12px; border-radius: 15px; font-weight: bold; transition: 0.2s;
-        }
-        .btn-confirm { background: var(--khoiri); color: white; }
-        .btn-cancel { background: #f3f4f6; color: #666; }
+        /* Loader */
+        #loader { text-align: center; padding: 50px; display: block; }
     </style>
 </head>
 <body>
 
     <div class="header-main">
-        <button onclick="window.history.back()" class="absolute left-6 top-8 text-white text-xl"><i class="fas fa-arrow-left"></i></button>
-        <h2 class="text-2xl font-black italic uppercase tracking-wider">Blood Donors</h2>
-        <p class="text-xs opacity-80 mt-1">মানবতার সেবায় আপনার একটি ক্লিক</p>
+        <button onclick="window.location.href='index.html'" class="absolute left-6 top-8 text-white text-xl"><i class="fas fa-arrow-left"></i></button>
+        <h2 class="text-2xl font-black italic">BLOOD DONORS</h2>
+        <p class="text-xs opacity-80 mt-1">সরাসরি ডেটাবেজ থেকে আপডেট করা হচ্ছে</p>
     </div>
 
-    <div class="search-container">
-        <i class="fas fa-search text-gray-400 mr-3"></i>
-        <input type="text" placeholder="রক্তের গ্রুপ বা এলাকা লিখুন..." class="w-full py-4 outline-none text-sm bg-transparent">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin text-3xl text-[#800000]"></i>
+        <p class="mt-2 text-gray-500">ডোনার লিস্ট লোড হচ্ছে...</p>
     </div>
 
-    <div id="donorList" class="mt-8"></div>
-
-    <div id="custom-alert-overlay">
-        <div class="alert-box" id="alertBox">
-            <div class="alert-header">
-                <i class="fas fa-question-circle text-4xl mb-3"></i>
-                <h3 class="text-xl font-bold">নিশ্চিত করুন</h3>
-            </div>
-            <div class="alert-body">
-                <p id="alertMessage">আপনি কি নিশ্চিত যে এই ডোনার আজ রক্ত দিয়েছেন?</p>
-            </div>
-            <div class="alert-footer" id="alertFooter">
-                </div>
-        </div>
-    </div>
+    <div id="donorContainer" class="mt-6"></div>
 
     <script>
-        const donors = [
-            { name: "মোঃ আরিফ হোসেন", group: "B+", location: "মিরপুর-১০, ঢাকা", phone: "017XXXXXXXX", image: "https://i.pravatar.cc/150?u=1", lastDonate: "2024-01-10", status: "Active" },
-            { name: "সুমাইয়া আক্তার", group: "O-", location: "চাষাড়া, নারায়ণগঞ্জ", phone: "018XXXXXXXX", image: "https://i.pravatar.cc/150?u=2", lastDonate: "2024-05-25", status: "Active" }
-        ];
+        // আপনার Web App URL এখানে বসান
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyrLKtlPIYoa-Qwn1oc8TZ1pNULQeRJpK1r9ac6bJeLWpuRKAlu5_JVqaFUr47TSZ7XyA/exec";
+
+        async function fetchDonors() {
+            try {
+                const response = await fetch(scriptURL);
+                const data = await response.json();
+                renderDonors(data.donors);
+                document.getElementById('loader').style.display = 'none';
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('loader').innerHTML = "ডেটা লোড করতে সমস্যা হয়েছে।";
+            }
+        }
 
         function checkAvailability(lastDate) {
-            const diffDays = Math.ceil((new Date() - new Date(lastDate)) / (1000 * 60 * 60 * 24));
+            if (!lastDate || lastDate === "") return { canDonate: true, daysLeft: 0 };
+            const last = new Date(lastDate);
+            const today = new Date();
+            const diffDays = Math.ceil((today - last) / (1000 * 60 * 60 * 24));
             return { canDonate: diffDays >= 90, daysLeft: 90 - diffDays };
         }
 
-        function render() {
-            const container = document.getElementById('donorList');
+        function renderDonors(donors) {
+            const container = document.getElementById('donorContainer');
             container.innerHTML = "";
-            donors.forEach((d, i) => {
-                const info = checkAvailability(d.lastDonate);
-                container.innerHTML += `
+
+            donors.forEach((donor) => {
+                if(donor.status !== "Active") return;
+
+                const info = checkAvailability(donor.lastDonate);
+                const donorImg = donor.image || 'https://via.placeholder.com/150';
+
+                const card = `
                 <div class="donor-card">
-                    <div class="flex gap-5">
+                    <div class="flex gap-5 items-start">
                         <div class="image-container">
-                            <img src="${d.image}" class="donor-image">
-                            <span class="blood-group-label">${d.group}</span>
+                            <img src="${donorImg}" class="donor-image">
+                            <span class="blood-group-label">${donor.bloodGroup}</span>
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-bold text-gray-800 text-lg">${d.name}</h3>
-                            <p class="text-xs text-gray-500 mt-2"><i class="fas fa-map-marker-alt text-red-600 mr-2"></i> ${d.location}</p>
-                            <span class="status-badge ${info.canDonate ? 'available' : 'unavailable'}">
-                                <i class="fas ${info.canDonate ? 'fa-check-circle' : 'fa-clock'}"></i>
-                                ${info.canDonate ? 'বর্তমানে এভেলেবল' : info.daysLeft + ' দিন পর এভেলেবল'}
-                            </span>
+                            <h3 class="font-bold text-gray-800 text-lg">${donor.name}</h3>
+                            <p class="text-xs text-gray-500 mt-2"><i class="fas fa-map-marker-alt text-red-600 mr-2"></i> ${donor.district}, ${donor.upazila}</p>
+                            ${info.canDonate 
+                                ? `<span class="status-badge available"><i class="fas fa-check-circle"></i> বর্তমানে এভেলেবল</span>`
+                                : `<span class="status-badge unavailable"><i class="fas fa-clock"></i> ${info.daysLeft} দিন পর এভেলেবল</span>`
+                            }
                         </div>
                     </div>
                     <div class="action-area">
-                        <a href="tel:${d.phone}" class="btn-call"><i class="fas fa-phone-alt"></i> কল দিন</a>
-                        <button onclick="handleTick(${i})" class="btn-check ${!info.canDonate ? 'disabled' : ''}">
+                        <a href="tel:${donor.phone}" class="btn-call"><i class="fas fa-phone-alt"></i> কল দিন</a>
+                        <button onclick="updateDonationStatus('${donor.phone}', ${info.canDonate})" class="btn-check ${!info.canDonate ? 'disabled' : ''}">
                             <i class="fas ${info.canDonate ? 'fa-check' : 'fa-ban'}"></i>
                         </button>
                     </div>
                 </div>`;
+                container.innerHTML += card;
             });
         }
 
-        function showAlert(msg, isConfirm, onConfirm) {
-            const overlay = document.getElementById('custom-alert-overlay');
-            const box = document.getElementById('alertBox');
-            const footer = document.getElementById('alertFooter');
-            document.getElementById('alertMessage').innerText = msg;
-            
-            footer.innerHTML = isConfirm 
-                ? `<button class="alert-btn btn-cancel" onclick="closeAlert()">না</button>
-                   <button class="alert-btn btn-confirm" id="confirmOk">হ্যাঁ</button>`
-                : `<button class="alert-btn btn-confirm w-full" onclick="closeAlert()">ঠিক আছে</button>`;
+        async function updateDonationStatus(phone, canDonate) {
+            if (!canDonate) return;
+            if (confirm("আপনি কি নিশ্চিত যে এই ডোনার আজ রক্ত দিয়েছেন?")) {
+                const formData = new FormData();
+                formData.append('action', 'updateTick');
+                formData.append('Phone', phone);
 
-            overlay.style.display = 'flex';
-            setTimeout(() => box.classList.add('show'), 10);
-
-            if(isConfirm) {
-                document.getElementById('confirmOk').onclick = () => {
-                    closeAlert();
-                    onConfirm();
-                };
+                alert("আপডেট হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।");
+                await fetch(scriptURL, { method: 'POST', body: formData });
+                location.reload(); 
             }
         }
 
-        function closeAlert() {
-            const box = document.getElementById('alertBox');
-            box.classList.remove('show');
-            setTimeout(() => document.getElementById('custom-alert-overlay').style.display = 'none', 300);
-        }
-
-        function handleTick(index) {
-            const info = checkAvailability(donors[index].lastDonate);
-            if(!info.canDonate) return;
-
-            showAlert("আপনি কি নিশ্চিত যে এই ডোনার আজ রক্ত দিয়েছেন?", true, () => {
-                donors[index].lastDonate = new Date().toISOString().split('T')[0];
-                render();
-                setTimeout(() => {
-                    showAlert("ধন্যবাদ! উনার স্ট্যাটাস ৩ মাসের জন্য অফ করা হলো।", false);
-                }, 500);
-            });
-        }
-
-        window.onload = render;
+        window.onload = fetchDonors;
     </script>
 </body>
 </html>
