@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ব্লাড ডোনেশন ওয়েবসাইট - হোম</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --khoiri: #800000;
+            --deep-bg: #E5E1E1; 
+        }
+        body { background-color: var(--deep-bg); font-family: 'SolaimanLipi', sans-serif; margin: 0; padding: 0; }
+
+        /* হিরো সেকশন */
+        .hero-section {
+            background: linear-gradient(180deg, var(--khoiri) 0%, #b30000 100%);
+            border-radius: 40px; 
+            margin: 15px;
+            padding: 30px 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* কাউন্টার কার্ড - জিরো সেট করা */
+        .stat-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 15px 5px;
+            text-align: center;
+            color: white;
+            flex: 1;
+        }
+
+        /* বড় মেইন বাটন */
+        .btn-main {
+            width: 100%;
+            padding: 18px 0;
+            border-radius: 20px;
+            font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.2s;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        /* স্লিম বটম নেভিগেশন */
+        .bottom-nav-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 8px 20px 15px 20px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.08);
+            z-index: 1000;
+            border-top-left-radius: 35px;
+            border-top-right-radius: 35px;
+        }
+
+        .menu-wrapper { position: relative; }
+        .sub-menu {
+            position: absolute;
+            bottom: 25px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .menu-item {
+            position: absolute;
+            opacity: 0;
+            bottom: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .active-menu .menu-item { opacity: 1; pointer-events: auto; }
+
+        .active-menu .item-1 { transform: translate(-80px, -40px); }  
+        .active-menu .item-2 { transform: translate(-50px, -100px); } 
+        .active-menu .item-3 { transform: translate(0px, -130px); }   
+        .active-menu .item-4 { transform: translate(50px, -100px); }  
+        .active-menu .item-5 { transform: translate(80px, -40px); }   
+
+        .circle-btn {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--khoiri);
+        }
+        .btn-label { font-size: 10px; font-weight: bold; color: var(--khoiri); margin-top: 4px; }
+
+        .nav-btn-small {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #F9FAFB;
+            color: var(--khoiri);
+            border: 1px solid #F3F4F6;
+        }
+        .nav-label-small {
+            font-size: 10px;
+            font-weight: bold;
+            color: #6B7280;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body class="pb-32">
+
+    <header class="p-4 h-[80px] flex items-center justify-center">
+        <img src="https://via.placeholder.com/180x60?text=Logo+Space" class="w-[180px] h-[60px] object-contain">
+    </header>
+
+    <div class="hero-section">
+        <div class="flex gap-3 justify-between mb-8">
+            <div class="stat-card">
+                <p class="text-[10px] font-bold uppercase opacity-80 mb-1">মোট ইউজার</p>
+                <h2 class="text-2xl font-black">০</h2>
+            </div>
+            <div class="stat-card">
+                <p class="text-[10px] font-bold uppercase opacity-80 mb-1">রক্তদান</p>
+                <h2 class="text-2xl font-black">০</h2>
+            </div>
+            <div class="stat-card">
+                <p class="text-[10px] font-bold uppercase opacity-80 mb-1">সন্তুষ্ট ইউজার</p>
+                <h2 class="text-2xl font-black">০</h2>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-5">
+            <button onclick="window.location.href='donor-form.html'" class="btn-main bg-white text-[#800000] active:scale-95">
+                <i class="fas fa-heart text-red-600"></i> রক্তদাতা হন
+            </button>
+            <button onclick="window.location.href='donor-list.html'" class="btn-main bg-transparent border-2 border-white text-white active:scale-95">
+                <i class="fas fa-search"></i> রক্তের সন্ধান
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-8 px-6">
+        <h3 class="text-center font-bold text-gray-600 mb-4 text-xs tracking-widest uppercase">
+            — আমাদের স্মৃতিময় চিত্র —
+        </h3>
+        <div class="rounded-[30px] overflow-hidden h-[200px] relative p-1 bg-white shadow-md border-4 border-white">
+            <div id="slider" class="flex transition-transform duration-1000 h-full rounded-[25px] overflow-hidden">
+                <img src="https://via.placeholder.com/800x400/800000/FFFFFF?text=Slide+1" class="min-w-full object-cover">
+                <img src="https://via.placeholder.com/800x400/b30000/FFFFFF?text=Slide+2" class="min-w-full object-cover">
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav-container">
+        <div class="flex justify-between items-center max-w-md mx-auto relative">
+            
+            <div class="flex flex-col items-center">
+                <button onclick="window.location.href='index.html'" class="nav-btn-small">
+                    <i class="fas fa-home text-lg"></i>
+                </button>
+                <span class="nav-label-small">হোম</span>
+            </div>
+
+            <div class="menu-wrapper" id="menuMain">
+                <div class="sub-menu">
+                    <div class="menu-item item-1" onclick="window.location.href='contact.html'">
+                        <div class="circle-btn"><i class="fas fa-phone-alt"></i></div>
+                        <span class="btn-label">কন্টাক্ট</span>
+                    </div>
+                    <div class="menu-item item-2" onclick="window.location.href='group.html'">
+                        <div class="circle-btn text-blue-600"><i class="fab fa-facebook-messenger"></i></div>
+                        <span class="btn-label">গ্রুপ</span>
+                    </div>
+                    <div class="menu-item item-3" onclick="window.location.href='donor-list.html'">
+                        <div class="circle-btn text-red-600"><i class="fas fa-user-friends"></i></div>
+                        <span class="btn-label">রক্তদাতা</span>
+                    </div>
+                    <div class="menu-item item-4" onclick="window.location.href='gallery.html'">
+                        <div class="circle-btn text-orange-500"><i class="fas fa-images"></i></div>
+                        <span class="btn-label">ছবি</span>
+                    </div>
+                    <div class="menu-item item-5" onclick="window.location.href='admin.html'">
+                        <div class="circle-btn text-gray-800"><i class="fas fa-user-lock"></i></div>
+                        <span class="btn-label">এডমিন</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <button onclick="toggleMenu()" class="w-14 h-14 bg-[#800000] shadow-xl rounded-full text-white flex items-center justify-center z-[1001] border-4 border-white active:scale-90 transition-transform">
+                        <i id="menuIcon" class="fas fa-bars text-xl"></i>
+                    </button>
+                    <span class="nav-label-small">মেনু</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <button onclick="window.location.href='developer.html'" class="nav-btn-small">
+                    <i class="fas fa-code text-lg"></i>
+                </button>
+                <span class="nav-label-small">ডেভেলপার</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menuMain');
+            const icon = document.getElementById('menuIcon');
+            menu.classList.toggle('active-menu');
+            
+            if(menu.classList.contains('active-menu')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
+        }
+
+        let currentSlide = 0;
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % 2;
+            const slider = document.getElementById('slider');
+            if(slider) {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
