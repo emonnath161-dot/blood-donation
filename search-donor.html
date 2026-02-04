@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রক্তের সন্ধান করুন</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --khoiri: #800000; }
+        body { background-color: #f8f9fa; font-family: 'SolaimanLipi', sans-serif; }
+
+        .search-header {
+            background: linear-gradient(135deg, var(--khoiri) 0%, #b30000 100%);
+            border-radius: 0 0 40px 40px;
+        }
+
+        .donor-card {
+            background: white;
+            border-radius: 20px;
+            border-left: 5px solid var(--khoiri);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .blood-tag {
+            background: #fff5f5;
+            color: var(--khoiri);
+            border: 1px solid #ffebeb;
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <div class="search-header p-8 text-white text-center relative">
+        <button onclick="window.history.back()" class="absolute left-6 top-9 text-white">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </button>
+        <h2 class="text-2xl font-bold">রক্তের সন্ধান করুন</h2>
+        <p class="text-xs opacity-80 mt-1">সঠিক গ্রুপ ও লোকেশন দিয়ে খুঁজুন</p>
+    </div>
+
+    <div class="mt-[-30px] px-6">
+        <div class="bg-white p-6 rounded-3xl shadow-xl space-y-4">
+            <div class="relative">
+                <i class="fas fa-tint absolute left-4 top-4 text-red-600"></i>
+                <select id="groupSelect" class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#800000] appearance-none">
+                    <option value="">রক্তের গ্রুপ বেছে নিন</option>
+                    <option value="A+">A+</option><option value="A-">A-</option>
+                    <option value="B+">B+</option><option value="B-">B-</option>
+                    <option value="O+">O+</option><option value="O-">O-</option>
+                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                </select>
+            </div>
+
+            <div class="relative">
+                <i class="fas fa-map-marker-alt absolute left-4 top-4 text-gray-400"></i>
+                <input type="text" id="locationInput" placeholder="আপনার এলাকা/উপজেলা লিখুন" class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#800000]">
+            </div>
+
+            <button onclick="searchDonors()" class="w-full py-4 bg-[#800000] text-white font-bold rounded-2xl shadow-lg active:scale-95 transition-all">
+                রক্তদাতা খুঁজুন
+            </button>
+        </div>
+    </div>
+
+    <div id="resultArea" class="mt-8 px-6 hidden">
+        <h3 class="text-gray-600 font-bold mb-4 ml-1">রক্তদাতাদের তালিকা:</h3>
+        <div id="donorList" class="space-y-4">
+            </div>
+    </div>
+
+    <div id="noResult" class="mt-20 px-6 text-center hidden">
+        <i class="fas fa-search text-5xl text-gray-200 mb-4"></i>
+        <p class="text-gray-400">দুঃখিত, এই গ্রুপ বা এলাকায় কোনো রক্তদাতা পাওয়া যায়নি।</p>
+    </div>
+
+    <script>
+        function searchDonors() {
+            const group = document.getElementById('groupSelect').value;
+            const location = document.getElementById('locationInput').value;
+            const resultArea = document.getElementById('resultArea');
+            const donorList = document.getElementById('donorList');
+            const noResult = document.getElementById('noResult');
+
+            if(!group) {
+                alert("দয়া করে রক্তের গ্রুপ সিলেক্ট করুন।");
+                return;
+            }
+
+            // রেজাল্ট এরিয়া ক্লিনিং
+            donorList.innerHTML = "";
+            
+            // ডামি ডেটা (পরে এটি গুগল শিট থেকে ফিল্টার হবে)
+            const dummyDonors = [
+                { name: "আব্দুর রহমান", group: "O+", location: "ঢাকা", phone: "01700000000" },
+                { name: "করিম উদ্দিন", group: "A+", location: "চট্টগ্রাম", phone: "01800000000" }
+            ];
+
+            // ফিল্টারিং লজিক (আপাতত উদাহরণ হিসেবে)
+            const filtered = dummyDonors.filter(d => d.group === group);
+
+            if(filtered.length > 0) {
+                resultArea.classList.remove('hidden');
+                noResult.classList.add('hidden');
+                
+                filtered.forEach(donor => {
+                    const card = `
+                        <div class="donor-card p-4 flex justify-between items-center">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600 font-bold text-xl">
+                                    ${donor.group}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">${donor.name}</h4>
+                                    <p class="text-xs text-gray-500"><i class="fas fa-map-marker-alt mr-1"></i>${donor.location}</p>
+                                </div>
+                            </div>
+                            <a href="tel:${donor.phone}" class="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg active:scale-90 transition">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                        </div>
+                    `;
+                    donorList.innerHTML += card;
+                });
+            } else {
+                resultArea.classList.add('hidden');
+                noResult.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
