@@ -3,139 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>রক্তদাতা রেজিস্ট্রেশন - ব্লাড সার্ভিস</title>
+    <title>রক্তদাতা রেজিস্ট্রেশন</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --khoiri: #800000; --bg-gray: #E5E1E1; }
-        body { background-color: var(--bg-gray); font-family: 'SolaimanLipi', sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--bg-gray); font-family: 'SolaimanLipi', sans-serif; margin: 0; }
         
-        /* লাল খৈরি হেডার - এটিকে ফিক্সড পজিশনে রাখা হয়েছে */
-        .header-gradient {
+        .header-main {
             background: linear-gradient(135deg, var(--khoiri) 0%, #b30000 100%);
-            border-radius: 0 0 50px 50px;
-            padding: 50px 20px 80px 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-            z-index: 10;
+            border-radius: 0 0 35px 35px;
+            padding: 40px 20px;
+            color: white; text-align: center;
         }
 
-        /* নিচের ফর্ম কার্ড - এটিকে পর্যাপ্ত নেতিবাচক মার্জিন এবং প্যাডিং দিয়ে সুন্দরভাবে সেট করা হয়েছে */
-        .form-card {
-            background: white;
-            border-radius: 40px;
-            padding: 30px 25px;
-            margin: -50px 20px 30px 20px; /* হেডার থেকে নিচে নামানোর জন্য অ্যালাইনমেন্ট */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 20;
+        .form-container {
+            background: white; border-radius: 30px; padding: 25px;
+            margin: -20px 20px 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
-        .input-group { margin-bottom: 22px; }
-        .input-group label { display: block; font-weight: bold; color: #333; font-size: 15px; margin-bottom: 8px; margin-left: 5px; }
-        
-        .input-field {
-            width: 100%;
-            padding: 14px 20px;
-            background: #F3F4F6;
-            border: 1px solid #E5E7EB;
-            border-radius: 20px;
-            outline: none;
-            font-size: 15px;
-            transition: 0.3s;
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 14px; font-weight: bold; color: #555; margin-bottom: 8px; }
+        .input-group input, .input-group select {
+            width: 100%; padding: 12px 15px; border-radius: 12px;
+            border: 1px solid #ddd; outline: none; transition: 0.3s;
         }
-        .input-field:focus { border-color: var(--khoiri); background: white; box-shadow: 0 0 12px rgba(128,0,0,0.08); }
+        .input-group input:focus { border-color: var(--khoiri); box-shadow: 0 0 5px rgba(128,0,0,0.1); }
 
         .submit-btn {
-            width: 100%;
-            background: var(--khoiri);
-            color: white;
-            padding: 18px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 18px;
-            margin-top: 15px;
-            box-shadow: 0 10px 25px rgba(128,0,0,0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+            width: 100%; background: var(--khoiri); color: white;
+            padding: 16px; border-radius: 15px; font-weight: bold; font-size: 18px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: 0.3s;
         }
-        .submit-btn:active { transform: scale(0.96); }
+        .submit-btn:active { transform: scale(0.98); }
 
-        /* নোটিফিকেশন বক্স স্টাইল */
-        #notification-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modern-msg-box {
-            background: linear-gradient(145deg, #910000, #5c0000);
-            width: 100%;
-            max-width: 340px;
-            border-radius: 40px;
-            padding: 45px 30px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.2);
-            transform: scale(0.8);
-            opacity: 0;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #notification-overlay.active .modern-msg-box { transform: scale(1); opacity: 1; }
-
-        .success-icon { font-size: 70px; margin-bottom: 25px; animation: bounceIn 1s; }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); opacity: 1; }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
-        }
-
-        .home-link {
-            display: inline-block;
-            background: white;
-            color: var(--khoiri);
-            padding: 14px 40px;
-            border-radius: 50px;
-            font-weight: bold;
-            margin-top: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        /* Loading Overlay */
+        #overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            z-index: 9999; flex-direction: column; align-items: center; justify-content: center; color: white;
         }
     </style>
 </head>
-<body class="pb-10">
+<body>
 
-    <div class="header-gradient">
-        <button onclick="window.history.back()" class="absolute left-6 top-10 text-white active:scale-75 transition">
-            <i class="fas fa-arrow-left text-2xl"></i>
-        </button>
-        <h2 class="text-3xl font-bold mt-4">রক্তদাতা নিবন্ধন</h2>
-        <p class="text-sm opacity-80 mt-2">আপনার তথ্য দিয়ে জীবন বাঁচাতে সাহায্য করুন</p>
+    <div id="overlay">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-white mb-4"></div>
+        <p>তথ্য জমা হচ্ছে, দয়া করে অপেক্ষা করুন...</p>
     </div>
 
-    <div class="form-card">
-        <form id="donorForm">
+    <div class="header-main">
+        <button onclick="window.history.back()" class="absolute left-6 top-8 text-white"><i class="fas fa-arrow-left"></i></button>
+        <h2 class="text-2xl font-bold">রক্তদাতা রেজিস্ট্রেশন</h2>
+        <p class="text-xs opacity-80 mt-1">আপনার তথ্য গোপন ও নিরাপদ থাকবে</p>
+    </div>
+
+    <div class="form-container">
+        <form id="registrationForm">
             <div class="input-group">
-                <label>রক্তদাতার নাম</label>
-                <input type="text" name="Name" class="input-field" placeholder="আপনার পুরো নাম লিখুন" required>
+                <label><i class="fas fa-user mr-2 text-red-700"></i>পুরো নাম</label>
+                <input type="text" name="Name" placeholder="আপনার নাম লিখুন" required>
             </div>
 
             <div class="input-group">
-                <label>রক্তের গ্রুপ</label>
-                <select name="BloodGroup" class="input-field" required>
+                <label><i class="fas fa-tint mr-2 text-red-700"></i>রক্তের গ্রুপ</label>
+                <select name="BloodGroup" required>
                     <option value="">সিলেক্ট করুন</option>
                     <option value="A+">A+</option>
                     <option value="A-">A-</option>
@@ -149,69 +81,76 @@
             </div>
 
             <div class="input-group">
-                <label>মোবাইল নম্বর</label>
-                <input type="tel" name="Phone" class="input-field" placeholder="017XXXXXXXX" required>
+                <label><i class="fas fa-phone-alt mr-2 text-red-700"></i>মোবাইল নম্বর</label>
+                <input type="tel" name="Phone" placeholder="017XXXXXXXX" required>
             </div>
 
             <div class="input-group">
-                <label>লিঙ্গ</label>
-                <div class="flex gap-8 mt-2 ml-2">
-                    <label class="flex items-center gap-3 cursor-pointer text-gray-700 font-medium">
-                        <input type="radio" name="Gender" value="Male" class="w-5 h-5 accent-red-800" required> পুরুষ
-                    </label>
-                    <label class="flex items-center gap-3 cursor-pointer text-gray-700 font-medium">
-                        <input type="radio" name="Gender" value="Female" class="w-5 h-5 accent-red-800"> মহিলা
-                    </label>
-                </div>
+                <label><i class="fas fa-venus-mars mr-2 text-red-700"></i>লিঙ্গ</label>
+                <select name="Gender" required>
+                    <option value="পুরুষ">পুরুষ</option>
+                    <option value="মহিলা">মহিলা</option>
+                </select>
             </div>
 
-            <div class="grid grid-cols-2 gap-5">
+            <div class="grid grid-cols-2 gap-3">
                 <div class="input-group">
                     <label>বিভাগ</label>
-                    <input type="text" name="Division" class="input-field" placeholder="বিভাগ" required>
+                    <input type="text" name="Division" placeholder="যেমন: ঢাকা" required>
                 </div>
                 <div class="input-group">
                     <label>জেলা</label>
-                    <input type="text" name="District" class="input-field" placeholder="জেলা" required>
+                    <input type="text" name="District" placeholder="যেমন: মিরপুর" required>
                 </div>
             </div>
 
             <div class="input-group">
                 <label>উপজেলা/থানা</label>
-                <input type="text" name="Upazila" class="input-field" placeholder="আপনার থানা লিখুন" required>
+                <input type="text" name="Upazila" placeholder="উপজেলা লিখুন" required>
             </div>
 
             <div class="input-group">
-                <label>শেষ রক্তদানের তারিখ</label>
-                <input type="date" name="LastDonate" class="input-field">
+                <label><i class="fas fa-image mr-2 text-red-700"></i>প্রোফাইল ছবির লিঙ্ক (ঐচ্ছিক)</label>
+                <input type="url" name="ImageURL" placeholder="https://image-link.com/photo.jpg">
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-calendar-alt mr-2 text-red-700"></i>শেষ রক্তদানের তারিখ</label>
+                <input type="date" name="LastDonate">
+                <p class="text-[10px] text-gray-400 mt-1">যদি আগে রক্ত না দিয়ে থাকেন তবে খালি রাখুন</p>
             </div>
 
             <button type="submit" class="submit-btn">
-                <i class="fas fa-heart"></i> তথ্য জমা দিন
+                তথ্য জমা দিন <i class="fas fa-paper-plane"></i>
             </button>
         </form>
     </div>
 
-    <div id="notification-overlay">
-        <div class="modern-msg-box">
-            <div class="success-icon text-white">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3 class="text-2xl font-bold mb-3">ধন্যবাদ!</h3>
-            <p class="text-sm opacity-90 leading-relaxed px-2">
-                আপনার তথ্যটি সফলভাবে সংরক্ষিত হয়েছে। মানবতার কল্যাণে এগিয়ে আসার জন্য আপনাকে অভিনন্দন।
-            </p>
-            <a href="index.html" class="home-link active:scale-90 transition">হোমে ফিরে যান</a>
-        </div>
-    </div>
-
     <script>
-        document.getElementById('donorForm').onsubmit = function(e) {
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyrLKtlPIYoa-Qwn1oc8TZ1pNULQeRJpK1r9ac6bJeLWpuRKAlu5_JVqaFUr47TSZ7XyA/exec"; // আপনার Web App URL টি এখানে বসান
+        const form = document.getElementById('registrationForm');
+        const overlay = document.getElementById('overlay');
+
+        form.addEventListener('submit', e => {
             e.preventDefault();
-            const overlay = document.getElementById('notification-overlay');
             overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('active'); }, 50);
-        };
+
+            const formData = new FormData(form);
+            formData.append('action', 'register'); // স্ক্রিপ্টকে অ্যাকশন জানানো
+
+            fetch(scriptURL, { method: 'POST', body: formData})
+                .then(response => {
+                    overlay.style.display = 'none';
+                    alert("অভিনন্দন! আপনার রেজিস্ট্রেশন সফল হয়েছে।");
+                    form.reset();
+                    window.location.href = "index.html"; // হোম পেজে নিয়ে যাবে
+                })
+                .catch(error => {
+                    overlay.style.display = 'none';
+                    alert("দুঃখিত! তথ্য জমা দিতে সমস্যা হয়েছে।");
+                    console.error('Error!', error.message);
+                });
+        });
     </script>
 </body>
 </html>
