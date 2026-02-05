@@ -26,8 +26,9 @@
         }
 
         .image-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        /* ইমেজ কন্টেইনার এবং রক্তের গ্রুপের পজিশন ঠিক করা হয়েছে */
         .donor-image { width: 75px; height: 75px; border-radius: 22px; object-fit: cover; border: 3px solid #f9f9f9; background: #eee; }
-        .blood-group-label { background: var(--khoiri); color: white; font-size: 14px; font-weight: 900; padding: 2px 14px; border-radius: 10px; }
+        .blood-group-label { background: var(--khoiri); color: white; font-size: 14px; font-weight: 900; padding: 2px 14px; border-radius: 10px; min-width: 45px; text-align: center; }
 
         .status-badge { font-size: 11px; font-weight: bold; padding: 6px 14px; border-radius: 50px; display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; }
         .available { background: #DCFCE7; color: #166534; }
@@ -58,7 +59,7 @@
     <div id="donorContainer" class="mt-6"></div>
 
     <script>
-        // এখানে আপনার Web App URL বসান
+        // আপনার নতুন Deployment লিঙ্কটি এখানে আপডেট করুন
         const scriptURL = "https://script.google.com/macros/s/AKfycbxbz_MLn2RpoWi6hRb7h1fVKmKsHXRCQ-LncQBwrlXBOXG_ar8v1errT2wHbGnfEkSc3w/exec";
 
         async function fetchDonors() {
@@ -92,21 +93,30 @@
             container.innerHTML = "";
 
             donors.forEach((donor) => {
+                // স্ট্যাটাস Active না হলে দেখাবে না
                 if(donor.status !== "Active") return;
 
                 const info = checkAvailability(donor.lastDonate);
-                const donorImg = donor.image || 'https://via.placeholder.com/150';
+                
+                // অ্যাপস স্ক্রিপ্টের প্রোপার্টি অনুযায়ী নাম পরিবর্তন করা হয়েছে
+                const donorImg = donor.img || 'https://via.placeholder.com/150'; 
+                const bloodGroup = donor.group || 'N/A';
+                const district = donor.district || 'অজানা জেলা';
+                const upazila = donor.upazila || 'অজানা উপজেলা';
 
                 const card = `
                 <div class="donor-card">
                     <div class="flex gap-5 items-start">
                         <div class="image-container">
                             <img src="${donorImg}" class="donor-image">
-                            <span class="blood-group-label">${donor.bloodGroup}</span>
+                            <span class="blood-group-label">${bloodGroup}</span>
                         </div>
                         <div class="flex-1">
                             <h3 class="font-bold text-gray-800 text-lg">${donor.name}</h3>
-                            <p class="text-xs text-gray-500 mt-2"><i class="fas fa-map-marker-alt text-red-600 mr-2"></i> ${donor.district}, ${donor.upazila}</p>
+                            <p class="text-xs text-gray-500 mt-2">
+                                <i class="fas fa-map-marker-alt text-red-600 mr-2"></i> 
+                                ${district}, ${upazila}
+                            </p>
                             ${info.canDonate 
                                 ? `<span class="status-badge available"><i class="fas fa-check-circle"></i> বর্তমানে এভেলেবল</span>`
                                 : `<span class="status-badge unavailable"><i class="fas fa-clock"></i> ${info.daysLeft} দিন পর এভেলেবল</span>`
@@ -126,15 +136,10 @@
 
         async function updateDonationStatus(phone, canDonate) {
             if (!canDonate) {
-                Swal.fire({
-                    text: 'এই ডোনার বর্তমানে রক্ত দিতে পারবেন না।',
-                    icon: 'info',
-                    confirmButtonColor: '#800000'
-                });
+                Swal.fire({ text: 'এই ডোনার বর্তমানে রক্ত দিতে পারবেন না।', icon: 'info', confirmButtonColor: '#800000' });
                 return;
             }
 
-            // কনফার্মেশন কার্ড
             Swal.fire({
                 title: 'আপনি কি নিশ্চিত?',
                 text: "এই ডোনার কি আজ রক্ত দিয়েছেন?",
@@ -147,30 +152,20 @@
                 customClass: { popup: 'rounded-[30px]' }
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    // লোডিং কার্ড
-                    Swal.fire({
-                        title: 'আপডেট হচ্ছে...',
-                        allowOutsideClick: false,
-                        didOpen: () => { Swal.showLoading(); }
-                    });
-
-                    const formData = new FormData();
-                    formData.append('action', 'updateTick');
-                    formData.append('Phone', phone);
+                    Swal.fire({ title: 'আপডেট হচ্ছে...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
                     try {
-                        await fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' });
+                        // আপনার অ্যাপস স্ক্রিপ্টে 'updateTick' এর পরিবর্তে 'approveDonor' বা সঠিক অ্যাকশন আছে কি না দেখে নিন
+                        const response = await fetch(scriptURL, { 
+                            method: 'POST', 
+                            body: JSON.stringify({ action: 'approveDonor', phone: phone }) 
+                        });
                         
-                        Swal.fire({
-                            title: 'সফল!',
-                            text: 'ডোনার স্ট্যাটাস সফলভাবে আপডেট করা হয়েছে।',
-                            icon: 'success',
-                            confirmButtonColor: '#800000'
-                        }).then(() => {
+                        Swal.fire({ title: 'সফল!', text: 'ডোনার স্ট্যাটাস আপডেট হয়েছে।', icon: 'success', confirmButtonColor: '#800000' }).then(() => {
                             location.reload(); 
                         });
                     } catch (e) {
-                        Swal.fire('ত্রুটি!', 'আপডেট করতে সমস্যা হয়েছে।', 'error');
+                        Swal.fire('ত্রুটি!', 'সার্ভারে কানেক্ট করা যাচ্ছে না।', 'error');
                     }
                 }
             });
