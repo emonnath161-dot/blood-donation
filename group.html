@@ -35,14 +35,10 @@
         .group-card:active { transform: scale(0.95); }
 
         .icon-circle {
-            width: 70px;
-            height: 70px;
+            width: 70px; height: 70px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 30px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px; font-size: 30px;
         }
 
         .join-btn {
@@ -54,12 +50,15 @@
             color: white;
             transition: all 0.3s;
         }
+        
+        /* লোডিং টেক্সট */
+        .loading-status { font-size: 10px; opacity: 0.6; margin-top: 5px; }
     </style>
 </head>
 <body class="pb-10">
 
     <div class="header-gradient">
-        <button onclick="window.location.href='index.html'" class="absolute left-6 top-10 text-white">
+        <button onclick="window.history.back()" class="absolute left-6 top-10 text-white">
             <i class="fas fa-chevron-left text-xl"></i>
         </button>
         <h2 class="text-2xl font-bold mt-2">আমাদের কমিউনিটি</h2>
@@ -73,8 +72,8 @@
                 <i class="fab fa-facebook-f"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-800">ফেসবুক গ্রুপ</h3>
-            <p class="text-sm text-gray-500 mt-1">আমাদের অফিসিয়াল ফেসবুক গ্রুপে যুক্ত হয়ে নিয়মিত আপডেট পান।</p>
-            <a href="YOUR_FB_GROUP_LINK" class="join-btn bg-[#1877F2] shadow-lg shadow-blue-200">
+            <p id="fbMsg" class="text-sm text-gray-500 mt-1">আমাদের অফিসিয়াল ফেসবুক গ্রুপে যুক্ত হয়ে নিয়মিত আপডেট পান।</p>
+            <a id="fbLink" href="#" target="_blank" class="join-btn bg-[#1877F2] shadow-lg shadow-blue-200">
                 যুক্ত হন
             </a>
         </div>
@@ -85,7 +84,7 @@
             </div>
             <h3 class="text-lg font-bold text-gray-800">মেসেঞ্জার গ্রুপ</h3>
             <p class="text-sm text-gray-500 mt-1">জরুরি রক্তের প্রয়োজনে সরাসরি চ্যাট গ্রুপে যুক্ত থাকুন।</p>
-            <a href="YOUR_MESSENGER_LINK" class="join-btn bg-[#0084FF] shadow-lg shadow-blue-100">
+            <a id="msgLink" href="#" target="_blank" class="join-btn bg-[#0084FF] shadow-lg shadow-blue-100">
                 যুক্ত হন
             </a>
         </div>
@@ -96,12 +95,44 @@
             </div>
             <h3 class="text-lg font-bold text-gray-800">হোয়াটসঅ্যাপ গ্রুপ</h3>
             <p class="text-sm text-gray-500 mt-1">সবচেয়ে দ্রুত রেসপন্স পেতে আমাদের হোয়াটসঅ্যাপে যোগ দিন।</p>
-            <a href="YOUR_WHATSAPP_LINK" class="join-btn bg-[#25D366] shadow-lg shadow-emerald-100">
+            <a id="waLink" href="#" target="_blank" class="join-btn bg-[#25D366] shadow-lg shadow-emerald-100">
                 যুক্ত হন
             </a>
         </div>
 
     </div>
 
+    <script>
+        // আপনার অ্যাপস স্ক্রিপ্ট লিঙ্ক এখানে বসান
+        const scriptURL = "আপনার_অ্যাপস_স্ক্রিপ্ট_ইউআরএল_এখানে_দিন";
+
+        async function loadGroups() {
+            try {
+                const response = await fetch(scriptURL);
+                const data = await response.json();
+                
+                // অ্যাপস স্ক্রিপ্ট থেকে আসা ডাটা চেক করা হচ্ছে
+                if(data.group) {
+                    // ফেসবুক লিঙ্ক ও কাস্টম মেসেজ (যদি থাকে)
+                    document.getElementById('fbLink').href = data.group.fb;
+                    if(data.group.msg) {
+                        document.getElementById('fbMsg').innerText = data.group.msg;
+                    }
+                    
+                    // হোয়াটসঅ্যাপ লিঙ্ক
+                    document.getElementById('waLink').href = data.group.wa;
+                    
+                    // মেসেঞ্জার লিঙ্ক (আপনার শিটে যদি ৩টি কলাম থাকে তবে এখানে ৩য়টি বসবে)
+                    // যদি আপনার শিটে ৩য়টি মেসেঞ্জার হয় তবে নিচের কোড কাজ করবে
+                    document.getElementById('msgLink').href = data.group.msgLink || data.group.fb; 
+                }
+            } catch (error) {
+                console.error("গ্রুপ ডাটা লোড করতে সমস্যা:", error);
+            }
+        }
+
+        // পেজ লোড হলে ফাংশন কল
+        window.onload = loadGroups;
+    </script>
 </body>
 </html>
