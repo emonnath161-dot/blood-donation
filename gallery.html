@@ -24,11 +24,11 @@
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* ছোট স্ক্রিনে ২ কলাম */
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr); /* মোবাইলে ২ কলাম */
+            gap: 12px;
         }
 
-        @media (min-width: 640px) { /* বড় স্ক্রিনে ৩ কলাম */
+        @media (min-width: 640px) { 
             .gallery-grid {
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 20px;
@@ -47,24 +47,20 @@
 
         .gallery-item img {
             width: 100%;
-            height: 150px; /* সকল ছবির উচ্চতা একই রাখা হয়েছে */
+            height: 140px;
             object-fit: cover;
             border-radius: 15px 15px 0 0;
-        }
-        @media (min-width: 640px) {
-            .gallery-item img {
-                height: 180px;
-            }
+            background: #f0f0f0;
         }
 
         .image-title {
-            padding: 10px;
-            font-size: 13px;
+            padding: 8px;
+            font-size: 11px;
+            text-align: center;
             font-weight: bold;
             color: #4B5563;
         }
 
-        /* Modal for fullscreen image */
         #imageModal {
             display: none;
             position: fixed;
@@ -76,67 +72,37 @@
             padding: 20px;
         }
         #modalImage {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 15px;
+            max-width: 95%;
+            max-height: 80%;
+            border-radius: 10px;
             object-fit: contain;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
         .close-modal {
             position: absolute;
-            top: 20px;
+            top: 30px;
             right: 20px;
             color: white;
-            font-size: 30px;
+            font-size: 35px;
             cursor: pointer;
-            z-index: 10000;
-            background: rgba(0,0,0,0.5);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        .close-modal:hover { opacity: 0.8; }
+        
+        /* লোডিং মেসেজ */
+        .loader { text-align: center; padding: 50px; color: var(--khoiri); font-weight: bold; }
     </style>
 </head>
 <body class="pb-10">
 
     <div class="header-gradient">
-        <button onclick="window.location.href='index.html'" class="absolute left-6 top-10 text-white">
+        <button onclick="window.history.back()" class="absolute left-6 top-10 text-white">
             <i class="fas fa-chevron-left text-xl"></i>
         </button>
         <h2 class="text-2xl font-bold mt-2">ছবি গ্যালারি</h2>
-        <p class="text-xs opacity-80 mt-1">আমাদের স্মৃতিময় মুহূর্তগুলো দেখুন</p>
+        <p class="text-xs opacity-80 mt-1">আমাদের স্মৃতিময় মুহূর্তগুলো</p>
     </div>
 
-    <div class="px-6 mt-8">
-        <div class="gallery-grid">
-            <div class="gallery-item" onclick="openModal('https://via.placeholder.com/600x400/800000/FFFFFF?text=Event+1')">
-                <img src="https://via.placeholder.com/300x200/800000/FFFFFF?text=Event+1" alt="Event 1">
-                <p class="image-title">রক্তদান ক্যাম্পেইন ১</p>
-            </div>
-            <div class="gallery-item" onclick="openModal('https://via.placeholder.com/600x400/b30000/FFFFFF?text=Event+2')">
-                <img src="https://via.placeholder.com/300x200/b30000/FFFFFF?text=Event+2" alt="Event 2">
-                <p class="image-title">জীবন রক্ষায় আমরা</p>
-            </div>
-            <div class="gallery-item" onclick="openModal('https://via.placeholder.com/600x400/cc0000/FFFFFF?text=Event+3')">
-                <img src="https://via.placeholder.com/300x200/cc0000/FFFFFF?text=Event+3" alt="Event 3">
-                <p class="image-title">সাহায্যের হাত</p>
-            </div>
-            <div class="gallery-item" onclick="openModal('https://via.placeholder.com/600x400/e60000/FFFFFF?text=Event+4')">
-                <img src="https://via.placeholder.com/300x200/e60000/FFFFFF?text=Event+4" alt="Event 4">
-                <p class="image-title">নতুন ডোনার</p>
-            </div>
-            <div class="gallery-item" onclick="openModal('https://via.placeholder.com/600x400/990000/FFFFFF?text=Event+5')">
-                <img src="https://via.placeholder.com/300x200/990000/FFFFFF?text=Event+5" alt="Event 5">
-                <p class="image-title">সচেতনতামূলক ইভেন্ট</p>
-            </div>
-            <div class="gallery-item" onclick="openModal('https://via.placeholder.com/600x400/ff3333/FFFFFF?text=Event+6')">
-                <img src="https://via.placeholder.com/300x200/ff3333/FFFFFF?text=Event+6" alt="Event 6">
-                <p class="image-title">হাসিখুশি মুহূর্ত</p>
-            </div>
+    <div class="px-4 mt-8">
+        <div id="galleryContainer" class="gallery-grid">
+            <div class="loader col-span-2">স্মৃতিগুলো লোড হচ্ছে...</div>
         </div>
     </div>
 
@@ -146,6 +112,43 @@
     </div>
 
     <script>
+        // আপনার অ্যাপস স্ক্রিপ্ট লিঙ্ক এখানে বসান
+        const scriptURL = "আপনার_অ্যাপস_স্ক্রিপ্ট_ইউআরএল_এখানে_দিন";
+
+        async function fetchGallery() {
+            try {
+                // doGet ফাংশন থেকে ডাটা নেওয়া হচ্ছে
+                const response = await fetch(scriptURL);
+                const data = await response.json();
+                
+                // অ্যাপস স্ক্রিপ্টে 'memories' অবজেক্ট থাকা প্রয়োজন
+                if(data.memories) {
+                    renderGallery(data.memories);
+                } else {
+                    document.getElementById('galleryContainer').innerHTML = "<p class='text-center col-span-2'>কোনো ছবি পাওয়া যায়নি।</p>";
+                }
+            } catch (error) {
+                console.error("গ্যালারি লোড করতে সমস্যা:", error);
+                document.getElementById('galleryContainer').innerHTML = "<p class='text-center col-span-2'>ডাটা লোড করতে ব্যর্থ হয়েছে।</p>";
+            }
+        }
+
+        function renderGallery(images) {
+            const container = document.getElementById('galleryContainer');
+            container.innerHTML = ''; // লোডার সরানো
+
+            // উল্টো দিক থেকে দেখালে নতুন ছবি আগে আসবে (Reverse)
+            images.reverse().forEach((img, index) => {
+                const item = `
+                    <div class="gallery-item" onclick="openModal('${img.url}')">
+                        <img src="${img.url}" alt="Memory ${index+1}">
+                        <p class="image-title">স্মৃতি - ${images.length - index}</p>
+                    </div>
+                `;
+                container.innerHTML += item;
+            });
+        }
+
         function openModal(src) {
             document.getElementById('modalImage').src = src;
             document.getElementById('imageModal').style.display = 'flex';
@@ -153,15 +156,14 @@
 
         function closeModal() {
             document.getElementById('imageModal').style.display = 'none';
-            document.getElementById('modalImage').src = ''; // ছবি রিসেট করা
         }
 
-        // মডালের বাইরে ক্লিক করলে বন্ধ হবে
         window.onclick = function(event) {
-            if (event.target == document.getElementById('imageModal')) {
-                closeModal();
-            }
+            if (event.target == document.getElementById('imageModal')) closeModal();
         }
+
+        // পেজ লোড হলেই ডাটা কল হবে
+        window.onload = fetchGallery;
     </script>
 </body>
 </html>
